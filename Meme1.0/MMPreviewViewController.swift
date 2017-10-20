@@ -30,7 +30,6 @@ class MMPreviewViewController: UIViewController {
     @IBOutlet weak var memeBottomTextField: UITextField!
     @IBOutlet weak var memeTopTextField: UITextField!
     @IBOutlet weak var memeImageView: UIImageView!
-    @IBOutlet weak var bottomPanelDivider: UIView!
     
     // Constraints
     @IBOutlet weak var bottomPanelWidthConstraint: NSLayoutConstraint!
@@ -101,10 +100,17 @@ class MMPreviewViewController: UIViewController {
     @IBAction func shareTapped(_ sender: Any) {
         // Create a Meme Image
         let memeImage = MMMemeUtility.generateMemeImageFrom(view: memeContainerView)
-        let topText = memeTopTextField.text ?? ""
-        let bottomText = memeBottomTextField.text ?? ""
         
-        let currentMeme = MMMeme(topText: topText, bottomText: bottomText, image: memeImage)
+        // Top Text
+        guard let topText = memeTopTextField.text else {
+            return
+        }
+        // Bottom Text
+        guard let bottomText = memeBottomTextField.text else {
+            return
+        }
+        
+        let currentMeme = MMMeme(topText: topText , bottomText: bottomText , image: memeImage)
         
         // Meme Share Meme
         MMMemeUtility.shareMeme(meme: currentMeme, inViewController: self)
@@ -148,17 +154,13 @@ extension MMPreviewViewController: MMImageImporterProtocol {
     func checkForCameraSource() {
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             // Camera Not Available
-            // Hide Camera Button
-            bottomPanelWidthConstraint.constant = MMConstants.bottomPanelCameraNotAvailable
-            bottomPanelDivider.isHidden = true
-            cameraButton.isHidden = true
+            // Disable Camera Button
+            cameraButton.isEnabled = false
             return
         }
         
-        // Show Camera Controls
-        bottomPanelWidthConstraint.constant = MMConstants.bottomPanelCameraAvailable
-        bottomPanelDivider.isHidden = false
-        cameraButton.isHidden = false
+        // Enable Camera Controls
+        cameraButton.isEnabled = true
     }
     
     // Presents Image Source selected . Camera or Gallery

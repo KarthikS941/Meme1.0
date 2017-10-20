@@ -47,8 +47,8 @@ struct MMConstants {
     static let bottomPanelCameraAvailable: CGFloat = 200        // Bottom Panel if Camera is not available
     static let bottomPanelCameraNotAvailable: CGFloat = 100     // Bottom Panel if Camera is available
     
-    static let memeTopDefault = "Top Text"              // Default Text for Meme Top Text Field
-    static let memeBottomDefault = "Bottom Text"        // Default Text for Meme Bottom Text Field
+    static let memeTopDefault = "TOP TEXT"              // Default Text for Meme Top Text Field
+    static let memeBottomDefault = "BOTTOM TEXT"        // Default Text for Meme Bottom Text Field
 }
 
 // MARK: - View Controller Extension
@@ -86,12 +86,10 @@ extension UIViewController {
             
             // If Yes ,Move View up for text field to be visible to user
             if viewInput.isHidden {
-                // Get Height of Keyboard
-                let totalHeight = keyboardSize.height
                 // Get Height of view
-                let vewHeight = self.view.frame.size.height - ((viewInput.view?.frame.origin.y)! + (viewInput.view?.frame.size.height)!)
+                let vewHeight = self.view.frame.size.height - ((viewInput.view?.frame.origin.y)! + (viewInput.view?.frame.size.height)!*2)
                 // Move Distance
-                self.view.frame.origin.y -= keyboardSize.height - (totalHeight - vewHeight)
+                self.view.frame.origin.y -= vewHeight
                 
                 UIView.animate(withDuration: duration) {
                     self.view.layoutIfNeeded()
@@ -105,7 +103,7 @@ extension UIViewController {
         // Check if view is active
         if let view = vc.view.currentFirstResponder() {
             let viewY = view.frame.origin.y + view.frame.size.height
-            let visibleViewY = vc.view.frame.size.height - keyboardHeight
+            let visibleViewY = vc.view.frame.size.height - keyboardHeight-62
             
             if viewY > visibleViewY {
                 // View is Behind Keyboard
